@@ -1,0 +1,115 @@
+Build output
+
+**/bin/
+**/obj/
+
+Visual Studio
+
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+Visual Studio Code
+
+.vscode/
+
+Rider / JetBrains
+
+.idea/
+*.sln.iml
+
+.NET / NuGet
+
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+
+Test results
+
+TestResults/
+**/TestResults/
+*.trx
+
+Logs
+
+*.log
+logs/
+**/logs/
+
+Publish output
+
+publish/
+**/publish/
+
+Code coverage
+
+coverage/
+*.coverage
+*.coveragexml
+
+OS generated files
+
+.DS_Store
+Thumbs.db
+
+Environment / local configuration
+
+.env
+.env.*
+!.env.example
+
+Local development settings
+
+appsettings.Local.json
+appsettings.Development.local.json
+
+User secrets
+
+secrets.json
+
+Docker local overrides
+
+docker-compose.override.yml
+
+Azure / deployment local files
+
+*.publishsettings
+
+Temporary files
+
+*.tmp
+*.temp
+*.bak
+
+Generated files
+
+Generated/
+**/Generated/
+
+EF Core migrations bundles / local database files
+
+*.db
+*.db-shm
+*.db-wal
+
+Node.js (if frontend/gateway tooling is added later)
+
+node_modules/
+
+Coverage tools
+
+.coverage/
+.opencover/
+*.opencover.xml
+*.lcov
+
+Local certificates
+
+*.pfx
+*.p12
+EOF
