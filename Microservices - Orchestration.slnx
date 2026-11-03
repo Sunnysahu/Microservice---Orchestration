@@ -1,1 +1,9 @@
-<Solution />
+<Solution>
+  <Folder Name="/SQL/">
+    <File Path="DB.sql" />
+  </Folder>
+  <Project Path="InventoryService/InventoryService.csproj" />
+  <Project Path="OrderService/OrderService.csproj" />
+  <Project Path="PaymentService/PaymentService.csproj" />
+  <Project Path="SagaOrchestrator/SagaOrchestrator.csproj" />
+</Solution>
