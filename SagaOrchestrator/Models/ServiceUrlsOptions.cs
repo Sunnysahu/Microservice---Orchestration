@@ -4,7 +4,7 @@ public class ServiceUrlsOptions
 {
     public const string SectionName = "Services";
 
-    public required string Inventory { get; set; }
+    public string Inventory { get; set; } = string.Empty;
 
-    public required string Payment { get; set; }
+    public string Payment { get; set; } = string.Empty;
 }

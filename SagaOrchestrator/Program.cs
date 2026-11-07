@@ -21,14 +21,12 @@ builder.Services
     .Validate(
         options =>
             Uri.TryCreate(options.Inventory, UriKind.Absolute, out var inventoryUri)
-            && (inventoryUri.Scheme == Uri.UriSchemeHttp ||
-                inventoryUri.Scheme == Uri.UriSchemeHttps),
+            && (inventoryUri.Scheme == Uri.UriSchemeHttp || inventoryUri.Scheme == Uri.UriSchemeHttps),
         "Inventory URL must be a valid absolute HTTP/HTTPS URL.")
     .Validate(
         options =>
             Uri.TryCreate(options.Payment, UriKind.Absolute, out var paymentUri)
-            && (paymentUri.Scheme == Uri.UriSchemeHttp ||
-                paymentUri.Scheme == Uri.UriSchemeHttps),
+            && (paymentUri.Scheme == Uri.UriSchemeHttp || paymentUri.Scheme == Uri.UriSchemeHttps),
         "Payment URL must be a valid absolute HTTP/HTTPS URL.")
     .ValidateOnStart();
 
@@ -40,6 +38,7 @@ builder.Services.AddHttpClient("Inventory", (serviceProvider, client) =>
     client.Timeout = TimeSpan.FromSeconds(10);
 });
 
+
 builder.Services.AddHttpClient("Payment", (serviceProvider, client) =>
 {
     var options = serviceProvider.GetRequiredService<IOptions<ServiceUrlsOptions>>().Value;
@@ -47,6 +46,7 @@ builder.Services.AddHttpClient("Payment", (serviceProvider, client) =>
     client.BaseAddress = new Uri(options.Payment);
     client.Timeout = TimeSpan.FromSeconds(10);
 });
+
 
 var app = builder.Build();
 
