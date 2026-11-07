@@ -1,6 +1,5 @@
-﻿namespace InventoryService.Services
+﻿namespace InventoryService.Services;
+public class OrderService
 {
-    public class OrderService
-    {
-    }
 }
+

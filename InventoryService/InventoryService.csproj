@@ -15,4 +15,8 @@
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SagaCommerce.Contracts\SagaCommerce.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>
