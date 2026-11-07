@@ -1,5 +1,6 @@
 -- MicroService - Orchestration
 
+
 CREATE DATABASE SagaCommerce_OrderDb;
 GO
 
@@ -49,6 +50,17 @@ CREATE INDEX IX_OrderItems_OrderId
 ON dbo.OrderItems(OrderId);
 GO
 
+ALTER TABLE dbo.Orders
+ADD
+    IdempotencyKey NVARCHAR(100) NULL,
+    RequestHash CHAR(64) NULL;
+GO
+
+CREATE UNIQUE INDEX UX_Orders_IdempotencyKey
+ON dbo.Orders(IdempotencyKey)
+WHERE IdempotencyKey IS NOT NULL;
+GO
+
 SELECT * FROM OrderItems;
 SELECT * FROM Orders;
 
@@ -85,6 +97,28 @@ GO
 
 CREATE UNIQUE INDEX UX_SagaInstances_OrderId
 ON dbo.SagaInstances(OrderId);
+GO
+
+
+ALTER TABLE dbo.SagaInstances
+ADD
+    IdempotencyKey NVARCHAR(100) NULL,
+    RequestHash CHAR(64) NULL,
+    RetryCount INT NOT NULL
+        CONSTRAINT DF_SagaInstances_RetryCount DEFAULT 0,
+    NextAttemptAt DATETIME2 NULL,
+    LeaseId UNIQUEIDENTIFIER NULL,
+    LeaseUntil DATETIME2 NULL;
+GO
+
+CREATE UNIQUE INDEX UX_SagaInstances_IdempotencyKey
+ON dbo.SagaInstances(IdempotencyKey)
+WHERE IdempotencyKey IS NOT NULL;
+GO
+
+CREATE INDEX IX_SagaInstances_Recovery
+ON dbo.SagaInstances(Status, NextAttemptAt, LeaseUntil)
+INCLUDE (SagaId, OrderId, CurrentStep);
 GO
 
 SELECT * FROM SagaInstances;
@@ -136,6 +170,24 @@ VALUES
 ('Monitor', 30);
 GO
 
+
+ALTER TABLE dbo.InventoryReservations
+ADD
+    SagaId UNIQUEIDENTIFIER NULL,
+    IdempotencyKey NVARCHAR(100) NULL;
+GO
+
+
+CREATE UNIQUE INDEX UX_InventoryReservations_Saga_Product
+ON dbo.InventoryReservations(SagaId, ProductId)
+WHERE SagaId IS NOT NULL;
+GO
+
+CREATE INDEX IX_InventoryReservations_Order_Status
+ON dbo.InventoryReservations(OrderId, Status)
+INCLUDE (SagaId, ProductId, Quantity);
+GO
+
 SELECT * FROM Products;
 SELECT * FROM InventoryReservations;
 
@@ -171,5 +223,22 @@ CREATE TABLE dbo.Payments
         CHECK (Amount > 0)
 );
 GO
+
+ALTER TABLE dbo.Payments
+ADD
+    SagaId UNIQUEIDENTIFIER NULL,
+    RequestHash CHAR(64) NULL;
+GO
+
+CREATE UNIQUE INDEX UX_Payments_OrderId
+ON dbo.Payments(OrderId);
+GO
+
+CREATE INDEX IX_Payments_SagaId
+ON dbo.Payments(SagaId)
+WHERE SagaId IS NOT NULL;
+GO
+
+SELECT * FROM Payments;
 
 ---
