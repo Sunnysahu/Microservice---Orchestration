@@ -5,5 +5,6 @@
   <Project Path="InventoryService/InventoryService.csproj" />
   <Project Path="OrderService/OrderService.csproj" />
   <Project Path="PaymentService/PaymentService.csproj" />
+  <Project Path="SagaCommerce.Contracts/SagaCommerce.Contracts.csproj" Id="418def2e-881e-402f-8b1a-722b37f820b5" />
   <Project Path="SagaOrchestrator/SagaOrchestrator.csproj" />
 </Solution>
