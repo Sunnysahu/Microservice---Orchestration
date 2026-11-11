@@ -15,4 +15,6 @@ public class ProcessPaymentRequest
     [Required]
     [StringLength(100)]
     public string IdempotencyKey { get; set; } = string.Empty;
+
+    public bool SimulateFailure { get; set; }
 }

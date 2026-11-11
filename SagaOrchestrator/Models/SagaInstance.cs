@@ -2,6 +2,7 @@
 
 namespace SagaOrchestrator.Models;
 
+
 public class SagaInstance
 {
     [Key]
@@ -14,6 +15,20 @@ public class SagaInstance
     public string CurrentStep { get; set; } = "ReserveInventory";
 
     public string? LastError { get; set; }
+
+    public string? IdempotencyKey { get; set; }
+
+    public string? RequestHash { get; set; }
+
+    public string? RequestPayload { get; set; }
+
+    public int RetryCount { get; set; }
+
+    public DateTime? NextAttemptAt { get; set; }
+
+    public Guid? LeaseId { get; set; }
+
+    public DateTime? LeaseUntil { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\SagaCommerce.Contracts\SagaCommerce.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -18,17 +18,17 @@ public class InventoryManager(InventoryDbContext dbContext, ILogger<InventoryMan
 
         if (request.Items.Count == 0)
             return Failure("INVALID_REQUEST", "At least one item is required.");
-        
+
 
         if (request.Items.Any(x => x.ProductId <= 0 || x.Quantity <= 0))
             return Failure("INVALID_REQUEST", "ProductId and Quantity must be positive.");
 
         // A product must appear only once in a reservation request.
         if (request.Items.GroupBy(x => x.ProductId).Any(group => group.Count() > 1))
-            return Failure("INVALID_REQUEST","Duplicate ProductId values are not allowed.");
-        
+            return Failure("INVALID_REQUEST", "Duplicate ProductId values are not allowed.");
 
-        await using var transaction = await 
+
+        await using var transaction = await
             _dbContext.Database
             .BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken);
 
@@ -42,7 +42,7 @@ public class InventoryManager(InventoryDbContext dbContext, ILogger<InventoryMan
             {
                 var sameRequest = existingReservations.All
                     (x => x.OrderId == request.OrderId && x.IdempotencyKey == request.IdempotencyKey)
-                    && existingReservations.Count == request.Items.Count 
+                    && existingReservations.Count == request.Items.Count
                     && request.Items.All(item =>
                     existingReservations.Any(reservation =>
                     reservation.ProductId == item.ProductId && reservation.Quantity == item.Quantity));
@@ -100,7 +100,7 @@ public class InventoryManager(InventoryDbContext dbContext, ILogger<InventoryMan
                     );
 
                     return Failure(
-                        "INSUFFICIENT_STOCK", 
+                        "INSUFFICIENT_STOCK",
                         $"Insufficient stock for ProductId {item.ProductId}, or product does not exist."
                     );
                 }
@@ -154,9 +154,9 @@ public class InventoryManager(InventoryDbContext dbContext, ILogger<InventoryMan
 
     public async Task<OperationResponse> ReleaseAsync(ReleaseInventoryRequest request, CancellationToken cancellationToken)
     {
-        if (request.SagaId == Guid.Empty) 
+        if (request.SagaId == Guid.Empty)
             return Failure("INVALID_REQUEST", "SagaId is required.");
-        
+
 
         await using var transaction = await _dbContext.Database
             .BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken);
@@ -190,13 +190,13 @@ public class InventoryManager(InventoryDbContext dbContext, ILogger<InventoryMan
                         UPDATE dbo.Products
                         SET AvailableQuantity = AvailableQuantity + {reservation.Quantity}
                         WHERE ProductId = {reservation.ProductId}
-                        """, 
+                        """,
                         cancellationToken
                 );
 
                 if (affectedRows == 0)
                     throw new InvalidOperationException($"Product {reservation.ProductId} was not found during compensation.");
-                
+
 
                 reservation.Status = "Released";
             }

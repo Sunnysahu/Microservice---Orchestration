@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SagaCommerce.Contracts.Services;
 using SagaOrchestrator.Data;
 using SagaOrchestrator.Models;
 using Scalar.AspNetCore;
@@ -38,7 +39,6 @@ builder.Services.AddHttpClient("Inventory", (serviceProvider, client) =>
     client.Timeout = TimeSpan.FromSeconds(10);
 });
 
-
 builder.Services.AddHttpClient("Payment", (serviceProvider, client) =>
 {
     var options = serviceProvider.GetRequiredService<IOptions<ServiceUrlsOptions>>().Value;
@@ -47,6 +47,7 @@ builder.Services.AddHttpClient("Payment", (serviceProvider, client) =>
     client.Timeout = TimeSpan.FromSeconds(10);
 });
 
+builder.Services.AddScoped<SagaManager>();
 
 var app = builder.Build();
 

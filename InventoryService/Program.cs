@@ -18,7 +18,7 @@ builder.Services.AddScoped<InventoryManager>();
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    options.AddFixedWindowLimiter("inventory", limiterOptions => 
+    options.AddFixedWindowLimiter("inventory", limiterOptions =>
     {
         limiterOptions.PermitLimit = 100;
         limiterOptions.Window = TimeSpan.FromMinutes(1);

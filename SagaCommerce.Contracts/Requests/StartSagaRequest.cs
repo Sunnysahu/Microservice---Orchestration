@@ -17,4 +17,6 @@ public class StartSagaRequest
     [Required]
     [MinLength(1)]
     public List<OrderItemRequest> Items { get; set; } = [];
+
+    public bool SimulatePaymentFailure { get; set; }
 }
