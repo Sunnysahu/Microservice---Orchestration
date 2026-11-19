@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using SagaCommerce.Contracts.Services;
 using SagaOrchestrator.Data;
 using SagaOrchestrator.Models;
+using SagaOrchestrator.Services;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,12 +24,12 @@ builder.Services
         options =>
             Uri.TryCreate(options.Inventory, UriKind.Absolute, out var inventoryUri)
             && (inventoryUri.Scheme == Uri.UriSchemeHttp || inventoryUri.Scheme == Uri.UriSchemeHttps),
-        "Inventory URL must be a valid absolute HTTP/HTTPS URL.")
+            "Inventory URL must be a valid absolute HTTP/HTTPS URL.")
     .Validate(
         options =>
             Uri.TryCreate(options.Payment, UriKind.Absolute, out var paymentUri)
             && (paymentUri.Scheme == Uri.UriSchemeHttp || paymentUri.Scheme == Uri.UriSchemeHttps),
-        "Payment URL must be a valid absolute HTTP/HTTPS URL.")
+            "Payment URL must be a valid absolute HTTP/HTTPS URL.")
     .ValidateOnStart();
 
 builder.Services.AddHttpClient("Inventory", (serviceProvider, client) =>
@@ -48,6 +49,10 @@ builder.Services.AddHttpClient("Payment", (serviceProvider, client) =>
 });
 
 builder.Services.AddScoped<SagaManager>();
+
+builder.Services.AddScoped<SagaManager>();
+
+builder.Services.AddHostedService<SagaRecoveryWorker>();
 
 var app = builder.Build();
 
