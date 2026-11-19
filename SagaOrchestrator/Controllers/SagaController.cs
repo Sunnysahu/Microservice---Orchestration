@@ -17,4 +17,15 @@ public class SagaController(SagaManager sagaManager) : ControllerBase
 
         return StatusCode(result.StatusCode, result.Response);
     }
+
+    [HttpGet("{sagaId:guid}")]
+    public async Task<IActionResult> GetStatus(Guid sagaId, CancellationToken cancellationToken)
+    {
+        var result = await _sagaManager.GetStatusAsync(sagaId, cancellationToken);
+
+        if (result.Response == null)
+            return StatusCode(result.StatusCode);
+
+        return StatusCode(result.StatusCode, result.Response);
+    }
 }
